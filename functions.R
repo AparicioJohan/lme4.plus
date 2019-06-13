@@ -5,10 +5,9 @@ library(lme4)
 # Pseudo R square LME4
 r.lme4 <- function(Model){
   
-  Info <-   data.frame( broom.mixed::augment(Model) )
-  response      <- Info[,2]
+  response      <- Model@frame[,1]
   mean.response <- mean(response,na.rm = T)
-  fitted        <- Info[,".fitted"]
+  fitted        <- fitted(Model)
   SS.fitted     <- sum( (response-fitted)^2 , na.rm = T)
   SS.response   <- sum( (response-mean.response)^2 , na.rm = T )
   
