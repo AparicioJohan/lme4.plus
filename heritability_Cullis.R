@@ -14,14 +14,14 @@ Heri.cullis <- function(Model,Nom.gen){
   vc.e <- vc[grp=="Residual", vcov]        # error vc
   R    <- diag(n)*vc.e                     # R matrix = I * vc.e
   
-  # names of ramdon effects
+  # names of random effects
   nomb <- names(summary(Model)$ngrps)
   
   # Genotype
   n.g <- summary(Model)$ngrps[which(nomb==Nom.gen)]
   vc.g <- vc[grp==Nom.gen, vcov]   
   
-  # G matrix of ramdon effects
+  # G matrix of random effects
   G.tmp <- list()
   if (n.ran>=2) {
     for (i in 1:(n.ran-1)) {   # remove the residual variance
