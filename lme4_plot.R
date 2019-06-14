@@ -1,4 +1,28 @@
+##########################
+#  Spatial plot for lme4 
+##########################
 
+
+# first fill the col/row in your dataset
+"coords" <- function(col,row,data) {
+  require(data.table)
+  deparse(substitute(data))
+  x.coord <- data[,col]
+  y.coord <- data[,row]
+  
+  columns <- seq(min(x.coord), max(x.coord), by = min(diff(sort(unique(x.coord)))))
+  rows <- seq(min(y.coord), max(y.coord), by = min(diff(sort(unique(y.coord)))))
+  
+  xy.coord <- data.table(expand.grid(col = columns, row = rows))
+  h <- merge(xy.coord, data, by.x = c( "row","col"), by.y = c( "row","col"), 
+             all.x = TRUE, all.y = TRUE)
+  data <- arrange(h,col,row)
+  
+  return(data)
+}
+
+
+# Spatial plot 
 lme4.plot <-
   function(x,Datos,col="col",row="row",gen="line",all.in.one = TRUE, main = NULL, annotated = FALSE, depict.missing = FALSE, ...) {
     xlab <- col
@@ -66,9 +90,28 @@ lme4.plot <-
     fields::image.plot(columns, rows, t(matrix(df$geno.pred, ncol = length(columns), nrow = length(rows))), main = main.legends[5], col = colors, xlab = xlab, ylab = ylab, graphics.reset = TRUE, ...)
     if(!all.in.one)
       readline("Press return for next page....")
-    # La frecuencia del histograma esta duplicada si desea quitarla hist(unique(geno.pred))
+    # 
     suppressWarnings(hist(unique(geno.pred), main = main.legends[6], xlab = main.legends[6], ...))        
     title("")
     mtext(main, cex = 1.5, outer = TRUE, side = 3)
     invisible(df)
   }
+
+
+##########################
+#         Example
+##########################
+
+
+# library(SpATS)
+# library(lme4)
+# data("wheatdata")
+# summary(wheatdata)
+# 
+# wheatdata <- coords(col = "col", row="row", data = wheatdata)
+# 
+# Mo <- lmer(formula = yield ~ 1+(1|geno) + rep, data = wheatdata,REML = T )
+# 
+# # Spatial plot for lme4 
+# lme4.plot(Mo, wheatdata, col="col", row="row", gen="geno")
+
