@@ -2,6 +2,8 @@
 #  Spatial plot for lme4 
 ##########################
 
+library(data.table)
+library(dplyr)
 
 # first fill the col/row in your dataset
 "coords" <- function(col,row,data) {
