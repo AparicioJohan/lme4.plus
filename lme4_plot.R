@@ -6,7 +6,7 @@ library(data.table)
 library(dplyr)
 
 # first fill the col/row in your dataset
-"coords" <- function(col,row,data) {
+"coords" <- function(data,col,row) {
   require(data.table)
   deparse(substitute(data))
   x.coord <- data[,col]
