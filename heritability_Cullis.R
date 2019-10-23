@@ -1,6 +1,6 @@
 # Function Heritability cullis 
  
-require("data.table")
+require(data.table)
 
 Heri.cullis <- function(Model,Nom.gen){
   
