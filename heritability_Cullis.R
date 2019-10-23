@@ -1,6 +1,7 @@
 # Function Heritability cullis 
 
 Heri.cullis <- function(Model,Nom.gen){
+  require("data.table")
   
   Gen_levels=levels(Model@frame[,Nom.gen])
   
