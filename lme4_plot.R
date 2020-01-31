@@ -23,6 +23,12 @@ library(dplyr)
   return(data)
 }
 
+"dup" <- function(data,col="col",row="row"){
+  dup <- data[,c(col,row)][duplicated(data[,c(col,row)]), ] 
+  data  <-data[ which(!duplicated(data[,c(col,row)])) , ]
+  return(data)
+}
+
 
 # Spatial plot 
 lme4.plot <-
