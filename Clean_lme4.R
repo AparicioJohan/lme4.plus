@@ -4,7 +4,6 @@
 # Function for clean_datasets using lme4
 
 library(lme4)
-library(lmerTest)
 library(tidyverse)
 library(data.table)
 source("https://raw.githubusercontent.com/AparicioJohan/lme4.plus/master/functions.R")
@@ -21,17 +20,17 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
   m_alpha <- paste(Response, "~" , "1 + (1|" , Genotype, ") + " , rep , "+ (1|", rep,":", block, ")")
   m_rcbd <- paste(Response, "~" , "1 + (1|" , Genotype, ") + " , rep )
   Model <-  c(m_alpha, m_rcbd)
-  cond=  length(unique(chunk$block))
+  cond=  length(unique(Datos$block))
   mvOn = F
   ix = c()
   
-  reps <- sum(is.na(chunk[,"Response"] ))
+  reps <- sum(is.na(Datos[,"Response"] ))
   
-  if(cond == nrow(chunk)) return()
-  if(reps >= 0.6*nrow(chunk)) return()
-  if(length(unique(chunk[,rep]))==1) return()
-  if( sum(is.na(chunk[,Genotype]))>0.5*length(chunk[,Genotype]) )  return()
-  if( sum(is.na(chunk[,Response]))>0.5*length(chunk[,Response])) return()
+  if(cond == nrow(Datos)) return()
+  if(reps >= 0.6*nrow(Datos)) return()
+  if(length(unique(Datos[,rep]))==1) return()
+  if( sum(is.na(Datos[,Genotype]))>0.5*length(Datos[,Genotype]) )  return()
+  if( sum(is.na(Datos[,Response]))>0.5*length(Datos[,Response])) return()
   
   if (cond>1) {
     form=as.formula(Model[1])
@@ -42,7 +41,7 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
   
   while (mvOn == F) {
     
-    Mo <- lmer(form, data = chunk, 
+    Mo <- lmer(form, data = Datos, 
                control = lmerControl(optimizer ="Nelder_Mead"),
                na.action = na.omit, REML = T) 
     Mo %>% 
@@ -56,7 +55,7 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
       remTMP <- data.frame(Response=Datos[ix,Response],  Genotype = Datos[ix,Geno], col=Datos[ix,rep],row=Datos[ix,block] )
       remFinal <- rbind(remTMP,remFinal)
       
-      chunk[ix,"YDHA"] = NA
+      Datos[ix,"YDHA"] = NA
       
     } else {
       
@@ -76,14 +75,14 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
   Modelo.vars   <- as.data.table(VarCorr(Mo))
   VarG <- as.numeric(Modelo.vars[grp==Genotype,'vcov'])
   VarE <- as.numeric(Modelo.vars[grp=='Residual','vcov'])
-  replicate <- length(unique(chunk[,rep]))
+  replicate <- length(unique(Datos[,rep]))
   r2 <- as.numeric(r.lme4(Mo))
   
   Sum <- data.frame(file= paste0(name) , VarE=VarE, VarG=VarG, rep=replicate , r2=r2)
   Sum <- Sum %>% mutate(H=round(VarG/(VarG+VarE/replicate),2))
   
   
-  k=list(BLUPs=BLUPs, data_clean=chunk, Model=Mo, Remove=remFinal, Summ=Sum)
+  k=list(BLUPs=BLUPs, data_clean=Datos, Model=Mo, Remove=remFinal, Summ=Sum)
   k
 
   
