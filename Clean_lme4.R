@@ -81,7 +81,7 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
   replicate <- length(unique(Datos[,rep]))
   r2 <- as.numeric(r.lme4(Mo))
   
-  Sum <- data.frame(file= paste0(name) , VarE=VarE, VarG=VarG, rep=replicate , r2=r2)
+  Sum <- data.frame(Exp= paste0(name) , VarE=VarE, VarG=VarG, rep=replicate , r2=r2)
   Sum <- Sum %>% mutate(H=round(VarG/(VarG+VarE/replicate),2))
   
   
