@@ -3,7 +3,8 @@
 
 # Function for clean_datasets using lme4
 
-library(SpATS)
+library(lme4)
+library(lmerTest)
 library(tidyverse)
 library(data.table)
 source("https://raw.githubusercontent.com/AparicioJohan/lme4.plus/master/functions.R")
