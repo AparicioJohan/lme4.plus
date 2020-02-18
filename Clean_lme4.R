@@ -52,7 +52,7 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
     
     if ( sum( abs(res) > 3 ) ){
       
-      ix = c(ix, names( which( abs(res)>3 ) )) %>%  as.numeric() # which.max( abs(res) )
+      ix = c(names( which( abs(res)>3 ) )) %>%  as.numeric() # which.max( abs(res) )
       message("There are ", sum(abs(res) > 3), " NA values remaining")
       
       remTMP <- data.frame(Response=dat.rem[ix,Response],  Genotype = dat.rem[ix,Geno], rep=dat.rem[ix,rep],block=dat.rem[ix,block] )
