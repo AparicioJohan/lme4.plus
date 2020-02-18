@@ -3,6 +3,7 @@
 
 # Function for clean_datasets using lme4
 
+library(lmerTest)
 library(lme4)
 library(tidyverse)
 library(data.table)
@@ -10,7 +11,7 @@ source("https://raw.githubusercontent.com/AparicioJohan/lme4.plus/master/functio
 
 Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL , name='Exp', rep="rep", block="block"){
   
-  Datos <- droplevels(data)
+  Datos <- droplevels(data.frame(data,row.names = NULL))
   
   w <- 1                                         # Starter 
   k <- Num_desv                                  # Number of standard deviations to consider extreme outliers 
