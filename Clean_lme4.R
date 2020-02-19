@@ -33,7 +33,7 @@ Clean_lme4 <- function(Response, Geno , Num_desv=3, Show_results=TRUE, data=NULL
   if( sum(is.na(Datos[,Geno]))>0.5*length(Datos[,Geno]) )  return()
   if( sum(is.na(Datos[,Response]))>0.5*length(Datos[,Response])) return()
   
-  if (cond>1) {
+  if (cond>2) {
     form=as.formula(Model[1])
   } else {form=as.formula(Model[2])}
   
